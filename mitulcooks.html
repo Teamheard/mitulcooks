@@ -34,6 +34,53 @@
         line-height: 1.6;
     }
 </style>
+    <script>
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const button = document.getElementById("submit-button");
+        const confirmationMessage = document.getElementById("confirmation-message");
+        const errorMessage = document.getElementById("error-message");
+
+        // Disable the button to prevent multiple submissions
+        button.disabled = true;
+        button.innerText = "Submitted";
+
+        // Show confirmation message
+        confirmationMessage.classList.remove("hidden");
+        errorMessage.classList.add("hidden");
+
+        // Send the form data using XMLHttpRequest
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", form.action, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        const formData = new FormData(form);
+        const data = new URLSearchParams(formData).toString();
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log("Form successfully submitted");
+            } else {
+                console.error("Form submission failed");
+                button.innerText = "RSVP";
+                button.disabled = false;
+                confirmationMessage.classList.add("hidden");
+                errorMessage.classList.remove("hidden");
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error("Form submission failed");
+            button.innerText = "RSVP";
+            button.disabled = false;
+            confirmationMessage.classList.add("hidden");
+            errorMessage.classList.remove("hidden");
+        };
+
+        xhr.send(data);
+    }
+</script>
 </head>
     <body>
     <div class="container">
